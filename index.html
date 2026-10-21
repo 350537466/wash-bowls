@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>洗碗摞碗</title>
+<style>
+body{font-family:"Microsoft YaHei",sans-serif;background:#f4f8ff;margin:0;display:flex;flex-direction:column;align-items:center}
+h1{color:#1f4fbf;font-size:44px;margin:20px 0 4px}
+.rule{font-size:24px;color:#444;margin-bottom:10px}
+.row{display:flex;gap:60px;margin-top:14px;align-items:flex-end}
+.lab{font-size:22px;color:#555;text-align:center;margin-top:8px}
+.pile{display:flex;flex-direction:column-reverse;align-items:center;min-height:330px;width:170px;border-bottom:6px solid #8a5a2b}
+.bowl{width:140px;height:46px;margin-top:4px;background:#dbe6ff;border:3px solid #1f4fbf;border-radius:0 0 70px 70px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;color:#1f4fbf}
+.dirty{background:#f1e2c8;border-color:#b07a3a;color:#8a5a2b}
+.done{background:#d8f3e3;border-color:#1f8f4e;color:#1f8f4e}
+.btns{margin:28px 0 12px;display:flex;gap:30px}
+button{font-size:32px;padding:16px 46px;border:none;border-radius:14px;color:#fff;cursor:pointer}
+#wash{background:#1f8f4e}#take{background:#d62828}#rbtn{background:#888;font-size:24px}
+button:disabled{opacity:.35;cursor:not-allowed}
+#msg{font-size:28px;font-weight:bold;height:40px;color:#444}
+footer{position:fixed;bottom:8px;right:16px;font-size:16px;color:#999}
+</style></head><body>
+<h1>洗碗摞碗</h1>
+<div class="rule">思思按顺序洗 1～6 号碗，洗好的叠在桌上；学学只能从最上面拿走，放到碗柜摞成一摞</div>
+<div class="row">
+ <div><div class="pile" id="q"></div><div class="lab">待洗的碗</div></div>
+ <div><div class="pile" id="s"></div><div class="lab">桌上（洗好的）</div></div>
+ <div><div class="pile" id="o"></div><div class="lab">碗柜（学学摞的）</div></div>
+</div>
+<div class="btns"><button id="wash">思思洗一个</button><button id="take">学学拿一个</button><button id="rbtn">重来</button></div>
+<div id="msg"></div>
+<footer>李子老师AI生成</footer>
+<script>
+const N=6;let next,st,out;
+function reset(){next=1;st=[];out=[];draw('')}
+function draw(m){
+ q.innerHTML='';for(let i=N;i>=next;i--)q.innerHTML+=`<div class="bowl dirty">${i}</div>`;
+ s.innerHTML=st.map(x=>`<div class="bowl">${x}</div>`).join('');
+ o.innerHTML=out.map(x=>`<div class="bowl done">${x}</div>`).join('');
+ wash.disabled=next>N;take.disabled=!st.length;
+ msg.textContent=out.length==N?'完成！学学摞碗的顺序：'+out.join(', '):m;
+}
+wash.onclick=()=>{st.push(next++);draw('洗好 '+(next-1)+' 号碗，叠到桌上最上面')};
+take.onclick=()=>{const b=st.pop();out.push(b);draw('学学拿走最上面的 '+b+' 号碗')};
+rbtn.onclick=reset;reset();
+</script></body></html>
